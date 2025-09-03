@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>__MSG_appName__</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+    <style>
+        body {
+            background-color: #f1e7c8;
+            min-width: 200px;
+            min-height: 200px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            margin-right: 20px;
+            margin-left: 20px;
+            direction: __MSG_@@bidi_dir__;
+        }
+    </style>
+</head>
+
+<body>
+    <br />
+    <div class="block form-group">
+        <div id="popupcontent" class="block">
+            <a class="waves-effect waves-light btn flow-text" href="https://www.buymeacoffee.com/claycodes" target="_blank">Buy me a coffee</a><br />
+            <p class="flow-text">__MSG_instructions__"</p>
+            <ul class="collection flow-text">__MSG_listitems__
+            </ul>    
+            <a id="subscriptionSupport" class="tooltipped flow-text" data-position="top" data-tooltip="Support"
+                href="mailto:support@claycodes.org" target="_blank">support@claycodes.org</a>
+        </div>
+    </div>
+</body>
+<script src="popup.js"></script>
+
+</html>

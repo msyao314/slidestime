@@ -1,0 +1,54 @@
+{
+   "appDate": {
+      "description": "The word used for date in \u003C\u003Cdate>> placeholder",
+      "message": "date"
+   },
+   "appDesc": {
+      "description": "Description as displayed in the appstore.",
+      "message": "Create timers using placeholders. ie \u003C\u003C0:00+>>, \u003C\u003C5:00->>, \u003C\u003Ctime>>, \u003C\u003Cdate>>, \u003C\u003Cshortdate>>, \u003C\u003Clongdate>>"
+   },
+   "appLongDate": {
+      "description": "The word used for longdate in \u003C\u003Clongdate>> placeholder",
+      "message": "longdate"
+   },
+   "appName": {
+      "description": "Title in the store and for the popup",
+      "message": "Slides Timer"
+   },
+   "appShortDate": {
+      "description": "The word used for shortdate in \u003C\u003Cshortdate>> placeholder",
+      "message": "shortdate"
+   },
+   "appTime": {
+      "description": "The word used for time in \u003C\u003Ctime>> placeholder",
+      "message": "time"
+   },
+   "es": {
+      "description": "Language Code",
+      "message": "es"
+   },
+   "instructions": {
+      "description": "Instructions in the popup",
+      "message": "Slides Timer is an extension to automatically bring presented timers to life in slides. Times placed between &lt;&lt; and &gt;&gt; will be replaced with a timer. Use - to count down from the specified time. Use + to count up from the specified time. Use &lt;&lt;time&gt;&gt; to display the current time. \u003Cbr />Triggers: Slide advancement, playing audio or video on countdown.\u003Cbr/>Example:"
+   },
+   "listitems": {
+      "description": "List items to demonstrate use in the popup",
+      "message": "\u003Cli class=\"collection-item\">Use d key to pause timers. e key to reset timers. Timers will start pause with $ at the end.\u003C/li>\u003Cli class=\"collection-item\">&lt;&lt;5:00-&gt;&gt; will count down starting at 5 minutes.\u003C/li>\u003Cli class=\"collection-item\">&lt;&lt;2:00+&gt;&gt; will count up starting at 2 minutes.\u003C/li>\u003Cli class=\"collection-item\">&lt;&lt;time&gt;&gt; will display the current time in AM/PM format.\u003C/li>\u003Cli class=\"collection-item\">&lt;&lt;date&gt;&gt; will display the date in 00/00/00 format.\u003C/li>\u003Cli class=\"collection-item\">&lt;&lt;date&gt;&gt; will display the date in shortened word format.\u003C/li>\u003Cli class=\"collection-item\">&lt;&lt;date&gt;&gt; will display the date in word format.\u003C/li>\u003Cli class=\"collection-item\">When using countdown trigger advancing to the previous slide with an extra - &lt;&lt;00:10--&gt;&gt; will move to the previous slide after 10 seconds.\u003C/li>\u003Cli class=\"collection-item\">When using countdown trigger advancing to the next slide by adding + &lt;&lt;00:10-+&gt;&gt; will move to the next slide after 10 seconds.\u003C/li>\u003Cli class=\"collection-item\">When using countdown trigger audio inserted on the slide by adding @ &lt;&lt;00:10-@&gt;&gt;.\u003C/li>\u003Cli class=\"collection-item\">When using countdown trigger video inserted on the slide by adding ! &lt;&lt;00:10-!&gt;&gt;.\u003C/li>\u003Cli class=\"collection-item\">&lt;&lt;time&gt;&gt; and &lt;&lt;date&gt;&gt; can be customized by adding | and formatting. &lt;&lt;date|MM/dd/yyyy&gt;&gt;\u003C/li>"
+   },
+   "reset": {
+      "description": "reset key",
+      "message": "e"
+   },
+   "stop": {
+      "description": "stop key",
+      "message": "d"
+   },
+   "subscribe": {
+      "description": "Instructions in the popup",
+      "message": ""
+   },
+   "subscribelabel": {
+      "description": "Subscribe label for button",
+      "message": "Subscribe"
+   }
+}

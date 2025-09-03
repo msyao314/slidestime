@@ -1,0 +1,29 @@
+{
+   "action": {
+      "default_icon": {
+         "19": "images/icons/19.png",
+         "38": "images/icons/38.png"
+      },
+      "default_popup": "popup.html"
+   },
+   "content_scripts": [ {
+      "js": [ "contentscript.js" ],
+      "matches": [ "https://docs.google.com/presentation*" ],
+      "run_at": "document_start"
+   } ],
+   "default_locale": "en",
+   "description": "__MSG_appDesc__",
+   "icons": {
+      "128": "images/icons/128.png",
+      "16": "images/icons/16.png",
+      "19": "images/icons/19.png",
+      "38": "images/icons/38.png",
+      "64": "images/icons/64.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjleP6ss3oWdn/0Ce7tfMf7pdCcaVWKElssl8SRJfO/gaGncB5vxS1lmZtjlsocZLESdyR2oVXbqE28imIOLITbY9uJtHz1/qILFmeMcxXjY+4ivkLjGsOcs2hQpO9JKxNlLPHpb3i0mroC0UU2O69z/ds7I54C4Yu8L6iBvcK2tEZE1zDw1x8wTsG8lZJTO4wCEBJPgZ7zJYEF0iL6hDQWzhBAbty1acS5/ByDpTqMsAStIRk6YmBxsN6YvVbkNJ5EfIBNZRcd7N6De45xnuAukzUnmHxUNvRkGGPbPTuKuwSVSNJ629MiGUkk7CYJt+ueSaIj9+/wlcQSpfa5h8tQIDAQAB",
+   "manifest_version": 3,
+   "name": "__MSG_appName__",
+   "offline_enabled": true,
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.27"
+}

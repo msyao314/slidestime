@@ -1,0 +1,50 @@
+{
+   "appDate": {
+      "description": "The word used for date in \u003C\u003Cdate>> placeholder",
+      "message": "fecha"
+   },
+   "appDesc": {
+      "description": "Description as displayed in the appstore.",
+      "message": "Crea temporizadores usando comodines. ej: \u003C\u003C0:00+>>, \u003C\u003C5:00->>, \u003C\u003Chora>>, \u003C\u003Cfecha>>, \u003C\u003Cfechacorta>>, \u003C\u003Cfechalarga>>"
+   },
+   "appLongDate": {
+      "description": "The word used for longdate in \u003C\u003Clongdate>> placeholder",
+      "message": "fechalarga"
+   },
+   "appName": {
+      "description": "Title in the store and for the popup",
+      "message": "Temporizador de Slides"
+   },
+   "appShortDate": {
+      "description": "The word used for shortdate in \u003C\u003Cshortdate>> placeholder",
+      "message": "fechacorta"
+   },
+   "appTime": {
+      "description": "The word used for time in \u003C\u003Ctime>> placeholder",
+      "message": "hora"
+   },
+   "en": {
+      "description": "Language Code",
+      "message": "en"
+   },
+   "instructions": {
+      "description": "Instructions in the popup",
+      "message": "Temporizador de Slides es una extension para crear temporizadores en tiempo real dentro de slides. Tiempos colocados entre &lt;&lt; and &gt;&gt; serán reemplazados don un temporizador. Usa - como el último carácter para hacer conteo regresivo del tiempo especificado. Usa + para hacer un conteo ascendiente del tiempo especificado. Usa &lt;&lt;hora&gt;&gt; para mostrar la hora actual. \u003Cbr />Por ejemplo:"
+   },
+   "listitems": {
+      "description": "List items to demonstrate use in the popup",
+      "message": "\u003Cli>&lt;&lt;5:00-&gt;&gt; será un conteo regresivo a partir de  5 minutos.\u003C/li>\u003Cli>&lt;&lt;2:00+&gt;&gt; será un conteo ascendiente a partir de  2 minutos.\u003C/li>\u003Cli>&lt;&lt;hora&gt;&gt; mostrará la hora actual en formato AM/PM.\u003C/li>"
+   },
+   "reset": {
+      "description": "reset key",
+      "message": "e"
+   },
+   "stop": {
+      "description": "stop key",
+      "message": "d"
+   },
+   "subscribelabel": {
+      "description": "Subscribe label for button",
+      "message": "Suscribir"
+   }
+}
