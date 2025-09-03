@@ -1,20 +1,20 @@
-const config = { attributes: true, childList: true },
+var config = { attributes: true, childList: true },
     t = {},
     st = '&lt;&lt;',
     en = '&gt;&gt;',
-    regexstring = `${st}[\\w_:;^⌃&~$ \\<\\=\\/\\>\\"\\-\\+@!|]+${en}`,
+    regexstring = st + '[\\w_:;^⌃&~$ \\<\\=\\/\\>\\"\\-\\+@!|]+' + en,
     re = new RegExp(regexstring, 'g'),
     op = {
-        '+': function (a, b) { return a - b },
-        '-': function (a, b) { return a + b },
-        '*': function (a, b) { return a * b },
-        '/': function (a, b) { return a / b },
+        '+': function (a, b) { return a - b; },
+        '-': function (a, b) { return a + b; },
+        '*': function (a, b) { return a * b; },
+        '/': function (a, b) { return a / b; }
     },
     stoppableIds = {},
     initialized = {},
-    cTime = {}
+    cTime = {};
 
-let timeoutId = 0, setSlide, direction = '', distance, presenttime, id, id2, language;
+var timeoutId = 0, setSlide, direction = '', distance, presenttime, id, id2, language;
 
 if (window.navigator.languages) {
     language = window.navigator.languages[0];
@@ -22,15 +22,15 @@ if (window.navigator.languages) {
     language = window.navigator.userLanguage || window.navigator.language;
 }
 
-const clearObject = (obj) => {
-    const props = Object.getOwnPropertyNames(obj);
-    for (let i = 0; i < props.length; i++) {
+var clearObject = function (obj) {
+    var props = Object.getOwnPropertyNames(obj);
+    for (var i = 0; i < props.length; i++) {
         delete obj[props[i]];
     }
-}
+};
 
 function getFuncName() {
-    return getFuncName.caller.name
+    return getFuncName.caller.name;
 }
 
 document.addEventListener("fullscreenchange", function () {
@@ -39,16 +39,15 @@ document.addEventListener("fullscreenchange", function () {
     }
     timeoutId = setTimeout(function () {
         if (document.fullscreenElement) {
-            console.log('fullscreenchange')
+            console.log('fullscreenchange');
             setID();
         } else {
-            console.log('not fullscreenchange')
-            clearObject(initialized)
-            clearObject(cTime)
-            setSlide = undefined
+            console.log('not fullscreenchange');
+            clearObject(initialized);
+            clearObject(cTime);
+            setSlide = undefined;
         }
         timeoutId = 0;
-
     }, 100);
 }, false);
 
@@ -59,21 +58,22 @@ function listenforpresent() {
     presenttime = setTimeout(function () {
         if (document.getElementsByClassName("punch-full-screen-element punch-full-window-overlay").length > 0) {
             setID();
-            const preconfig = { childList: true, subtree: false };
-            const obs = new MutationObserver(function (e) {
-                e.forEach(mutation => {
+            var preconfig = { childList: true, subtree: false };
+            var obs = new MutationObserver(function (e) {
+                for (var i = 0; i < e.length; i++) {
+                    var mutation = e[i];
                     if (mutation.removedNodes && mutation.removedNodes.length > 0) {
-                        clearObject(initialized)
-                        clearObject(cTime)
-                        obs.disconnect()
+                        clearObject(initialized);
+                        clearObject(cTime);
+                        obs.disconnect();
                     }
-                })
+                }
             });
             obs.observe(document.getElementsByClassName("punch-full-screen-element punch-full-window-overlay")[0], preconfig);
 
         } else {
-            setSlide = undefined
-            listenforpresent()
+            setSlide = undefined;
+            listenforpresent();
         }
     }, 100);
 }
@@ -83,222 +83,214 @@ function setTimerString(str) {
 }
 
 function setID() {
-    let slidenumbernode
-    const iframe = document.querySelector('iframe.punch-present-iframe')
+    var slidenumbernode;
+    var iframe = document.querySelector('iframe.punch-present-iframe');
     if (iframe) {
-
-        slidenumbernode = iframe.contentWindow.document.querySelector('[role="listbox"]  [role="option"][aria-selected="true"]')
+        slidenumbernode = iframe.contentWindow.document.querySelector('[role="listbox"]  [role="option"][aria-selected="true"]');
 
         if (!slidenumbernode) {
-            slidenumbernode = iframe.contentWindow.document.getElementById(':z') | iframe.contentWindow.document.getElementById(':11');
+            slidenumbernode = iframe.contentWindow.document.getElementById(':z') || iframe.contentWindow.document.getElementById(':11');
         }
 
         if (!slidenumbernode) {
-            setTimerString(getFuncName())
+            setTimerString(getFuncName());
             return;
         }
 
-        let start = false;
+        var start = false;
         if (!setSlide) {
             observer.observe(slidenumbernode, config);
-            setSlide = slidenumbernode.innerText
+            setSlide = slidenumbernode.innerText;
             start = true;
         }
 
-        if (slidenumbernode.innerText != setSlide || start == true) {
+        if (slidenumbernode.innerText != setSlide || start === true) {
             setSlide = slidenumbernode.innerText;
-
             start = false;
-            const txts = iframe.contentWindow.document.getElementsByTagName('text');
+            var txts = iframe.contentWindow.document.getElementsByTagName('text');
 
-            if (txts.length == 0) {
+            if (txts.length === 0) {
                 setSlide = undefined;
-                setTimerString(getFuncName())
+                setTimerString(getFuncName());
                 return;
             }
 
-
-            [...txts].forEach((txt, j) => {
+            for (var j = 0; j < txts.length; j++) {
+                var txt = txts[j];
                 if (txt.innerHTML.length > 0) {
-                    updateTime(txt, j)
+                    updateTime(txt, j);
                 }
-            })
+            }
         }
     }
     if (iframe && iframe.contentWindow) {
         iframe.contentWindow.document.addEventListener("keypress", function (event) {
             if (event.key == chrome.i18n.getMessage('stop')) {
-                iframe.contentWindow.document.querySelectorAll('.stoppable').forEach(function (element) {
+                var stoppables = iframe.contentWindow.document.querySelectorAll('.stoppable');
+                for (var i = 0; i < stoppables.length; i++) {
+                    var element = stoppables[i];
                     if (!element.dataset.stop || element.dataset.stop === 'false') {
-                        element.dataset.stop = 'true'
+                        element.dataset.stop = 'true';
                     } else {
-                        element.dataset.stop = 'false'
+                        element.dataset.stop = 'false';
                     }
                     if (element.dataset.stop === 'false') {
-                        //if direction is + reset the endobject?
-                        mytime(element)
+                        mytime(element);
                     }
-                });
+                }
             }
             if (event.key == chrome.i18n.getMessage('reset')) {
-                iframe.contentWindow.document.querySelectorAll('.stoppable').forEach(function (element) {
-                    element.dataset.timestring = element.dataset.original
-                    delete element.dataset.endobj
-                    element.innerHTML = element.dataset.timestring.replace(/[-\+]/g, '')
-                    clearTimeout(stoppableIds[element.id])
-                    mytime(element)
-                });
+                var stoppables = iframe.contentWindow.document.querySelectorAll('.stoppable');
+                for (var i = 0; i < stoppables.length; i++) {
+                    var element = stoppables[i];
+                    element.dataset.timestring = element.dataset.original;
+                    delete element.dataset.endobj;
+                    element.innerHTML = element.dataset.timestring.replace(/[-\+]/g, '');
+                    clearTimeout(stoppableIds[element.id]);
+                    mytime(element);
+                }
             }
         });
     }
 }
 
 function updateTime(element, j) {
-    const id = element.parentElement.parentElement.parentElement.parentElement.getAttribute('id');
-    let tstring
-    element.id = `${id}_${j}`
-    element.dataset.parentid = id
+    var id = element.parentElement.parentElement.parentElement.parentElement.getAttribute('id');
+    var tstring;
+    element.id = id + "_" + j;
+    element.dataset.parentid = id;
 
     if (!element.dataset.timestring) {
-        const matched = element.innerHTML.match(re);
+        var matched = element.innerHTML.match(re);
 
         if (!matched) {
-            return
+            return;
         }
-        tstring = matched[0].replace(st, '').replace(en, '')
+        tstring = matched[0].replace(st, '').replace(en, '');
 
-        element.classList.add('timer')
-        const modreg = new RegExp('[0-9a-zA-Z]+', 'g')
-        const hasMod = !modreg.test(tstring.slice(-2))
+        element.classList.add('timer');
+        var modreg = new RegExp('[0-9a-zA-Z]+', 'g');
+        var hasMod = !modreg.test(tstring.slice(-2));
 
-
-        const chars = String(tstring.match(/[@!$^⌃&~\-+]+/g))
-        const mods = chars.slice(-1*(chars.length - 1))
-        const mod = hasMod ? mods : ((element && element.hasAttribute('data-modifier')) ? element.getAttribute('data-modifier') : null)
+        var chars = String(tstring.match(/[@!$^⌃&~\-+]+/g));
+        var mods = chars.slice(-1 * (chars.length - 1));
+        var mod = hasMod ? mods : ((element && element.hasAttribute('data-modifier')) ? element.getAttribute('data-modifier') : null);
         if (mod) {
             tstring = tstring.slice(0, tstring.length - mod.length);
-            element.dataset.modifier = mod
+            element.dataset.modifier = mod;
         }
-        const dir = tstring.match(/[-\+]/g)
+        var dir = tstring.match(/[-\+]/g);
 
         if ((dir || (mod && !mod.includes('~')))) {
-            element.classList.add('stoppable')
-            if (mod && mod.includes('$')) {
-                element.dataset.stop = 'true'
-                element.innerHTML = tstring.replace(/[-\+]/g, '')
+            element.classList.add('stoppable');
+            if (mod && mod.indexOf('$') !== -1) {
+                element.dataset.stop = 'true';
+                element.innerHTML = tstring.replace(/[-\+]/g, '');
             }
         }
-        element.dataset.direction = dir ? dir[0] : null
+        element.dataset.direction = dir ? dir[0] : null;
 
         if (dir && dir.length > 0) {
-            tstring = tstring.replace(/[-\+]/g, '') + dir[0]
+            tstring = tstring.replace(/[-\+]/g, '') + dir[0];
         }
 
-        if(mod && mod.includes('~')){
-            element.dataset.continuous = tstring
+        if (mod && mod.indexOf('~') !== -1) {
+            element.dataset.continuous = tstring;
         }
-        if(new RegExp(/[0-9:]+/g).test(tstring)){
-            element.classList.add('stoppable')
+        if (new RegExp(/[0-9:]+/g).test(tstring)) {
+            element.classList.add('stoppable');
         }
-        element.dataset.timestring = tstring
-        element.dataset.original = tstring
+        element.dataset.timestring = tstring;
+        element.dataset.original = tstring;
     }
-    mytime(element)
+    mytime(element);
 }
 
-
 function mytime(element) {
-    if (!element) return
-    let direction = element.dataset.direction
-    let timeString = element.dataset.timestring
+    if (!element) return;
+    var direction = element.dataset.direction;
+    var timeString = element.dataset.timestring;
 
     if (cTime[element.dataset.parentid] && element.dataset.modifier &&
-        element.dataset.modifier.includes('~') &&
-        (element.dataset.direction.includes('+') || element.dataset.direction.includes('-'))) {
-        timeString = cTime[element.dataset.parentid]
+        element.dataset.modifier.indexOf('~') !== -1 &&
+        (element.dataset.direction.indexOf('+') !== -1 || element.dataset.direction.indexOf('-') !== -1)) {
+        timeString = cTime[element.dataset.parentid];
     }
 
+    var iframe = document.querySelector('iframe.punch-present-iframe');
+    if (!iframe) return;
 
-    const iframe = document.querySelector('iframe.punch-present-iframe')
-    if (!iframe) return
-
-
-    const stop = element.dataset.stop === 'true'
+    var stop = element.dataset.stop === 'true';
     if (stop) {
-        element.dataset.timestring = element.innerHTML + element.dataset.direction
-        delete element.dataset.endobj
-        return
+        element.dataset.timestring = element.innerHTML + element.dataset.direction;
+        delete element.dataset.endobj;
+        return;
     }
 
-    let endObj
+    var endObj;
 
     if (element.dataset.endobj) {
-        endObj = new Date(element.dataset.endobj)
+        endObj = new Date(element.dataset.endobj);
     }
-    let d = new Date();
-
-
+    var d = new Date();
 
     if (!direction && !element.dataset.direction) {
-        const dir = timeString.match(/[-\+]/g)
+        var dir = timeString.match(/[-\+]/g);
         if (dir && dir.length > 0) {
-            direction = dir[0]
+            direction = dir[0];
         }
     }
 
-    let type, format
+    var type, format;
 
-    if (timeString && timeString.includes('|')) {
-        const timesplit = timeString.split('|')
+    if (timeString && timeString.indexOf('|') !== -1) {
+        var timesplit = timeString.split('|');
         if (timesplit && timesplit.length > 1) {
-            format = String(timesplit[1]).trim()
+            format = String(timesplit[1]).trim();
         }
     }
-    timeString = timeString.toLowerCase()
+    timeString = timeString.toLowerCase();
 
-    if (timeString.includes(chrome.i18n.getMessage('appTime'))) {
-        type = 'time'
+    if (timeString.indexOf(chrome.i18n.getMessage('appTime')) !== -1) {
+        type = 'time';
     }
-    else if (timeString.toLowerCase().includes(chrome.i18n.getMessage('appShortDate')) || (direction && direction.toLowerCase().includes(chrome.i18n.getMessage('appShortDate')))) {
-        type = 'shortdate'
+    else if (timeString.toLowerCase().indexOf(chrome.i18n.getMessage('appShortDate')) !== -1 || (direction && direction.toLowerCase().indexOf(chrome.i18n.getMessage('appShortDate')) !== -1)) {
+        type = 'shortdate';
     }
-    else if (timeString.toLowerCase().includes(chrome.i18n.getMessage('appLongDate')) || (direction && direction.toLowerCase().includes(chrome.i18n.getMessage('appLongDate')))) {
-        type = 'longdate'
+    else if (timeString.toLowerCase().indexOf(chrome.i18n.getMessage('appLongDate')) !== -1 || (direction && direction.toLowerCase().indexOf(chrome.i18n.getMessage('appLongDate')) !== -1)) {
+        type = 'longdate';
     }
-    else if (timeString.toLowerCase().includes(chrome.i18n.getMessage('appDate')) || (direction && direction.toLowerCase().includes(chrome.i18n.getMessage('appDate')))) {
-        type = 'date'
+    else if (timeString.toLowerCase().indexOf(chrome.i18n.getMessage('appDate')) !== -1 || (direction && direction.toLowerCase().indexOf(chrome.i18n.getMessage('appDate')) !== -1)) {
+        type = 'date';
     }
 
-    // console.log('type', type, timeString, d)
-    let endseconds, time
-
+    var endseconds, time, h, m, s, ap;
     switch (type) {
         case 'time':
             if (!direction) {
                 direction = chrome.i18n.getMessage('appTime');
             }
 
-            const noseconds = timeString.includes('^') || timeString.includes('⌃')
-            const noampm = timeString.includes('&')
+            var noseconds = timeString.indexOf('^') !== -1 || timeString.indexOf('⌃') !== -1;
+            var noampm = timeString.indexOf('&') !== -1;
             h = d.getHours();
             m = d.getMinutes();
             s = d.getSeconds();
             ap = "am";
 
             if (format) {
-                time = new DateFormater(d).format(format)
+                time = (new DateFormater(d)).format(format);
             } else if (language == 'en-US') {
                 if (h > 11) { ap = "pm"; }
                 if (h > 12) { h = h - 12; }
                 if (h == 0) { h = 12; }
                 if (m < 10) { m = "0" + m; }
                 if (s < 10) { s = "0" + s; }
-                time = `${h}:${m}${noseconds ? '' : ':' + s} ${noampm ? '' : ap}`
-                //d formatting?
+                time = h + ":" + m + (noseconds ? '' : ':' + s) + (noampm ? '' : ' ' + ap);
             } else {
                 if (m < 10) { m = "0" + m; }
                 if (s < 10) { s = "0" + s; }
-                time = `${h}:${m}${noseconds ? '' : ':' + s}`
+                time = h + ":" + m + (noseconds ? '' : ':' + s);
             }
             break;
         case 'shortdate':
@@ -306,13 +298,12 @@ function mytime(element) {
                 direction = chrome.i18n.getMessage('appShortDate');
             }
             if (format) {
-                time = new DateFormater(d).format(format)
+                time = (new DateFormater(d)).format(format);
             } else {
-                const event = new Date();
-                const opts = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-                const date = event.toLocaleDateString(language, opts)
-                //console.log('lan, date', language, date,)
-                time = date
+                var event = new Date();
+                var opts = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+                var date = event.toLocaleDateString(language, opts);
+                time = date;
             }
             break;
         case 'longdate':
@@ -320,13 +311,12 @@ function mytime(element) {
                 direction = chrome.i18n.getMessage('appLongDate');
             }
             if (format) {
-                time = new DateFormater(d).format(format)
+                time = (new DateFormater(d)).format(format);
             } else {
-                const event = new Date();
-                const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                const date = event.toLocaleDateString(language, opts)
-                //console.log('lan, date', language, date,)
-                time = date
+                var event = new Date();
+                var opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                var date = event.toLocaleDateString(language, opts);
+                time = date;
             }
             break;
         case 'date':
@@ -334,56 +324,50 @@ function mytime(element) {
                 direction = chrome.i18n.getMessage('appDate');
             }
             if (format) {
-                time = new DateFormater(d).format(format)
+                time = (new DateFormater(d)).format(format);
             } else {
-                const event = new Date();
-                const opts = { year: 'numeric', month: 'numeric', day: 'numeric' };
-                const date = event.toLocaleDateString(language, opts)
-                //console.log('lan, date', language, date, timeString, direction)
-                time = date
+                var event = new Date();
+                var opts = { year: 'numeric', month: 'numeric', day: 'numeric' };
+                var date = event.toLocaleDateString(language, opts);
+                time = date;
             }
             break;
         default:
             d.setMilliseconds(0);
-            // if(!element.classList.contains('stoppable')){
-            //     element.classList.add('stoppable')
-            // }
-            const tm = timeString.match(/[0-9:]+/g)
-            let timeArray = tm[0].split(':');
-
+            var tm = timeString.match(/[0-9:]+/g);
+            var timeArray = tm[0].split(':');
 
             if (direction != '+' && direction != '-') {
                 direction = '-';
             }
-            let mins = d.getMinutes()
-            let seconds = d.getSeconds()
-            let hours = d.getHours()
+            var mins = d.getMinutes();
+            var seconds = d.getSeconds();
+            var hours = d.getHours();
 
             if (!endObj || isNaN(endObj)) {
-
                 if (timeArray.length < 3) {
-                    mins = op[direction](d.getMinutes(), parseInt(timeArray[0], 10))
-                    seconds = op[direction](d.getSeconds(), parseInt(timeArray[1], 10))
+                    mins = op[direction](d.getMinutes(), parseInt(timeArray[0], 10));
+                    seconds = op[direction](d.getSeconds(), parseInt(timeArray[1], 10));
                     hours = d.getHours();
                 }
                 else if (timeArray.length == 3) {
-                    hours = op[direction](d.getHours(), parseInt(timeArray[0], 10))
-                    mins = op[direction](d.getMinutes(), parseInt(timeArray[1], 10))
-                    seconds = op[direction](d.getSeconds(), parseInt(timeArray[2], 10))
+                    hours = op[direction](d.getHours(), parseInt(timeArray[0], 10));
+                    mins = op[direction](d.getMinutes(), parseInt(timeArray[1], 10));
+                    seconds = op[direction](d.getSeconds(), parseInt(timeArray[2], 10));
                 }
 
                 if (seconds >= 60) {
-                    mins = op[direction](mins, parseInt(seconds / 60, 10))
+                    mins = op[direction](mins, parseInt(seconds / 60, 10));
                     seconds = seconds % 60;
                 }
 
                 if (mins >= 60) {
-                    hours = op[direction](hours, parseInt(mins / 60, 10))
+                    hours = op[direction](hours, parseInt(mins / 60, 10));
                     mins = mins % 60;
                 }
 
                 if (hours >= 24) {
-                    const days = parseInt(hours / 24, 10);
+                    var days = parseInt(hours / 24, 10);
                     d.setDate(d.getDate() + days);
                 }
 
@@ -391,37 +375,35 @@ function mytime(element) {
                 d.setMinutes(mins);
                 d.setHours(hours % 24);
                 endObj = d;
-                element.dataset.endobj = d
+                element.dataset.endobj = d;
             }
 
-
-            const endtime = endObj.getTime();
-            const now = new Date().getTime();
-
+            var endtime = endObj.getTime();
+            var now = (new Date()).getTime();
 
             if (direction === '-' && now <= endtime) {
                 distance = endtime - now;
             }
-            else if (direction === '+') { //&& now >= endtime
+            else if (direction === '+') {
                 distance = now - endtime;
             }
 
-            let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            let hour = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hour = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             minutes = minutes < 10 ? '0' + minutes : minutes;
             seconds = parseInt((distance % (1000 * 60)) / 1000, 10);
             seconds = seconds < 10 ? '0' + seconds : seconds;
-            endseconds = seconds
+            endseconds = seconds;
 
             if (timeArray && timeArray.length == 2) {
                 if (parseInt(days, 10) > 0) {
-                    time = `${days}d ${hour}:${minutes}:${seconds}`
+                    time = days + "d " + hour + ":" + minutes + ":" + seconds;
                 } else {
                     if (parseInt(hour, 10) > 0) {
-                        time = `${hour}:${minutes}:${seconds}`
+                        time = hour + ":" + minutes + ":" + seconds;
                     } else {
-                        time = `${minutes}:${seconds}`
+                        time = minutes + ":" + seconds;
                     }
                 }
             } else if (timeArray && timeArray.length == 1) {
@@ -429,55 +411,55 @@ function mytime(element) {
             }
             else if (timeArray && timeArray.length == 3) {
                 if (parseInt(days, 10) > 0) {
-                    time = `${days}d ${hour}:${minutes}:${seconds}`
+                    time = days + "d " + hour + ":" + minutes + ":" + seconds;
                 } else {
-                    time = `${hour}:${minutes}:${seconds}`
+                    time = hour + ":" + minutes + ":" + seconds;
                 }
             }
     }
 
-    if (distance <= 500 && parseInt(endseconds, 10) == 0 && direction == '-') {  //we hit 0:00
+    if (distance <= 500 && parseInt(endseconds, 10) == 0 && direction == '-') {
         if (element.dataset.modifier) {
-
             switch (true) {
-                case element.dataset.modifier.includes('+'):
-                    advance('next', iframe.contentWindow.document.getElementsByClassName('goog-flat-button'))
-                    break
-                case element.dataset.modifier.includes('-'):
-                    advance('previous', iframe.contentWindow.document.getElementsByClassName('goog-flat-button'))
-                    break
-                case element.dataset.modifier.includes('@'):
-                    const aud = iframe.contentWindow.document.querySelectorAll('audio')
-                    aud.forEach(a => {
-                        a.play()
-                    })
-                    break
-                case element.dataset.modifier.includes('!'):
-                    const vids = iframe.contentWindow.document.querySelectorAll('iframe')
-                    vids.forEach(v => v.click())
-                    break
+                case element.dataset.modifier.indexOf('+') !== -1:
+                    advance('next', iframe.contentWindow.document.getElementsByClassName('goog-flat-button'));
+                    break;
+                case element.dataset.modifier.indexOf('-') !== -1:
+                    advance('previous', iframe.contentWindow.document.getElementsByClassName('goog-flat-button'));
+                    break;
+                case element.dataset.modifier.indexOf('@') !== -1:
+                    var aud = iframe.contentWindow.document.querySelectorAll('audio');
+                    for (var i = 0; i < aud.length; i++) {
+                        aud[i].play();
+                    }
+                    break;
+                case element.dataset.modifier.indexOf('!') !== -1:
+                    var vids = iframe.contentWindow.document.querySelectorAll('iframe');
+                    for (var i = 0; i < vids.length; i++) {
+                        vids[i].click();
+                    }
+                    break;
             }
         }
-        element.dataset.stop = 'true'
-        return
+        element.dataset.stop = 'true';
+        return;
     }
-    // console.log(element, time)
     element.innerHTML = time;
 
-    if (element.dataset.modifier && element.dataset.modifier.includes('~') && (element.dataset.direction.includes('+') || element.dataset.direction.includes('-'))) {
-        cTime[element.dataset.parentid] = element.innerHTML + element.dataset.direction
+    if (element.dataset.modifier && element.dataset.modifier.indexOf('~') !== -1 && (element.dataset.direction.indexOf('+') !== -1 || element.dataset.direction.indexOf('-') !== -1)) {
+        cTime[element.dataset.parentid] = element.innerHTML + element.dataset.direction;
     }
 
     stoppableIds[element.id] = setTimeout(function () {
-        mytime(element)
+        mytime(element);
     }, 50);
 }
 
 function advance(mod, buttons) {
     for (var r = 0; r < buttons.length; r++) {
         if (buttons[r].getAttribute('title')) {
-            if (buttons[r].getAttribute('title').toLowerCase().includes(mod)) {
-                clickelement(buttons[r])
+            if (buttons[r].getAttribute('title').toLowerCase().indexOf(mod) !== -1) {
+                clickelement(buttons[r]);
                 break;
             }
         }
@@ -485,7 +467,7 @@ function advance(mod, buttons) {
 }
 
 function clickelement(theButton) {
-    const simulateMouseEvent = function (element, eventName, coordX, coordY) {
+    var simulateMouseEvent = function (element, eventName, coordX, coordY) {
         element.dispatchEvent(new MouseEvent(eventName, {
             view: window,
             bubbles: true,
@@ -495,7 +477,7 @@ function clickelement(theButton) {
             button: 0
         }));
     };
-    const box = theButton.getBoundingClientRect(),
+    var box = theButton.getBoundingClientRect(),
         coordX = box.left + (box.right - box.left) / 2,
         coordY = box.top + (box.bottom - box.top) / 2;
 
@@ -504,45 +486,50 @@ function clickelement(theButton) {
     simulateMouseEvent(theButton, "click", coordX, coordY);
 }
 
-// Callback function to execute when mutations are observed
 var insertedNodes = [];
 
-const callback = function (mutations) {
-    mutations.forEach(function (mutation) {
+var callback = function (mutations) {
+    for (var m = 0; m < mutations.length; m++) {
+        var mutation = mutations[m];
         for (var i = mutation.addedNodes.length - 1; i >= 0; i--) {
             insertedNodes.push(mutation.addedNodes[i]);
             if (mutation.addedNodes[i].nodeName == 'BODY') {
-                observer.disconnect()
+                observer.disconnect();
                 observer.observe(document.body, config);
-                insertedNodes = []
-                break
+                insertedNodes = [];
+                break;
             }
             if (mutation.addedNodes[i].className == 'punch-full-screen-element punch-full-window-overlay') {
-                listenforpresent()
-                break
+                listenforpresent();
+                break;
             }
         }
         for (var i = 0; i < mutation.removedNodes.length; i++) {
             if (mutation.removedNodes[i].className == 'punch-full-screen-element punch-full-window-overlay') {
-                setSlide = undefined
-                break
+                setSlide = undefined;
+                break;
             }
         }
         if (mutation.attributeName == 'aria-selected') {
-            const isnumber = new RegExp(/[\d]+/g).test(mutation.target.innerText)
+            var isnumber = new RegExp(/[\d]+/g).test(mutation.target.innerText);
             if (isnumber && !initialized[mutation.target.innerText]) {
-                setID()
-                initialized[mutation.target.innerText] = true
+                setID();
+                initialized[mutation.target.innerText] = true;
             }
         }
-    })
+    }
 };
 
-const observer = new MutationObserver(callback);
+var observer = new MutationObserver(callback);
 observer.observe(document.documentElement, config);
 
-class DateFormater extends Date {
-    optionsobj = {
+// ES5 DateFormater
+function DateFormater(dateObj) {
+    Date.call(this);
+    if (dateObj && dateObj instanceof Date) {
+        this.setTime(dateObj.getTime());
+    }
+    this.optionsobj = {
         s: {
             keys: ['second', 'second'],
             values: ['numeric', '2-digit']
@@ -578,71 +565,81 @@ class DateFormater extends Date {
         y: {
             keys: [, 'year', , 'year'],
             values: [, '2-digit', , 'numeric']
-        },
-    }
-
-    formatstring = ''
-    format(string, locale = 'en-us') {
-        this.formatstring = string
-        this._replacement(string, locale)
-        return this.formatstring
-    }
-
-    _replacement(str, locale = 'en-us') {
-
-        Object.keys(this.optionsobj).forEach(k => {
-            const options = {}
-            const regex = new RegExp(`[${k}]+`, 'g');
-            const m = String(str.match(regex))
-            if (m.includes('h')) {
-                options.hour12 = true
-            }
-            if (m.includes('H')) {
-                options.hour12 = false
-            }
-            const key = this.optionsobj[k].keys[m.length - 1]
-            const value = this.optionsobj[k].values[m.length - 1]
-            if (!value || !key) {
-                return
-            }
-            options[key] = value
-
-            // console.log('options', options)
-            let newstr = new Intl.DateTimeFormat(locale, options).format(this)
-            // console.log('newstr', newstr)
-            if (value === '2-digit') {
-                newstr = this.pad(newstr)
-            }
-            if (m.includes('h')) {
-                const ampmmatch = String(str.match(/[t]+/g))
-                const hours = String(newstr.match(/\d/g).join(''))
-                const ampm = String(newstr.match(/[a-zA-Z]+/g)).slice(0, ampmmatch.length)
-                this.formatstring = this.formatstring.replace(m, hours)
-                this.formatstring = this.formatstring.replace(ampmmatch, ampm)
-                return this.formatstring
-            }
-            this.formatstring = this.formatstring.replace(m, newstr)
-        })
-        return this.formatstring
-    }
-
-    isLeapYear() {
-        const year = this.getFullYear();
-        if ((year & 3) != 0) return false;
-        return ((year % 100) != 0 || (year % 400) == 0);
-    }
-
-    getDOY() {
-        const dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-        const mn = this.getMonth();
-        const dn = this.getDate();
-        const dayOfYear = dayCount[mn] + dn;
-        if (mn > 1 && this.isLeapYear()) dayOfYear++;
-        return dayOfYear;
-    }
-    pad(number) {
-        const int = parseInt(number)
-        const str = number.replace(/[0-9]+/g, '')
-        return (int < 10 ? '0' : '') + int + str
-    }
+        }
+    };
+    this.formatstring = '';
 }
+DateFormater.prototype = Object.create(Date.prototype);
+DateFormater.prototype.constructor = DateFormater;
+
+DateFormater.prototype.format = function (string, locale) {
+    if (typeof locale === 'undefined') locale = 'en-us';
+    this.formatstring = string;
+    this._replacement(string, locale);
+    return this.formatstring;
+};
+
+DateFormater.prototype._replacement = function (str, locale) {
+    if (typeof locale === 'undefined') locale = 'en-us';
+    var self = this;
+    var formatstring = this.formatstring;
+    var optionsobj = this.optionsobj;
+    var keys = Object.keys(optionsobj);
+
+    for (var i = 0; i < keys.length; i++) {
+        var k = keys[i];
+        var options = {};
+        var regex = new RegExp('[' + k + ']+', 'g');
+        var m = String(str.match(regex));
+        if (m.indexOf('h') !== -1) {
+            options.hour12 = true;
+        }
+        if (m.indexOf('H') !== -1) {
+            options.hour12 = false;
+        }
+        var key = optionsobj[k].keys[m.length - 1];
+        var value = optionsobj[k].values[m.length - 1];
+        if (!value || !key) {
+            continue;
+        }
+        options[key] = value;
+
+        var newstr = new Intl.DateTimeFormat(locale, options).format(this);
+        if (value === '2-digit') {
+            newstr = this.pad(newstr);
+        }
+        if (m.indexOf('h') !== -1) {
+            var ampmmatch = String(str.match(/[t]+/g));
+            var hours = String(newstr.match(/\d/g).join(''));
+            var ampm = String(newstr.match(/[a-zA-Z]+/g)).slice(0, ampmmatch.length);
+            formatstring = formatstring.replace(m, hours);
+            formatstring = formatstring.replace(ampmmatch, ampm);
+            this.formatstring = formatstring;
+            continue;
+        }
+        formatstring = formatstring.replace(m, newstr);
+        this.formatstring = formatstring;
+    }
+    return this.formatstring;
+};
+
+DateFormater.prototype.isLeapYear = function () {
+    var year = this.getFullYear();
+    if ((year & 3) != 0) return false;
+    return ((year % 100) != 0 || (year % 400) == 0);
+};
+
+DateFormater.prototype.getDOY = function () {
+    var dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+    var mn = this.getMonth();
+    var dn = this.getDate();
+    var dayOfYear = dayCount[mn] + dn;
+    if (mn > 1 && this.isLeapYear()) dayOfYear++;
+    return dayOfYear;
+};
+
+DateFormater.prototype.pad = function (number) {
+    var int = parseInt(number);
+    var str = number.replace(/[0-9]+/g, '');
+    return (int < 10 ? '0' : '') + int + str;
+};
